@@ -9,17 +9,7 @@
 
 #import "MQTTKit.h"
 #import "mosquitto.h"
-
-#if 0 // set to 1 to enable logs
-
-#define LogDebug(frmt, ...) NSLog(frmt, ##__VA_ARGS__);
-
-#else
-
-#define LogDebug(frmt, ...)                                                    \
-  {}
-
-#endif
+#import "MQTTLog.h"
 
 #pragma mark - MQTT Message
 
@@ -81,7 +71,7 @@
 
 static void on_connect(struct mosquitto *mosq, void *obj, int rc) {
   MQTTClient *client = (__bridge MQTTClient *)obj;
-  LogDebug(@"[%@] on_connect rc = %d", client.clientID, rc);
+  MQTTLog(@"[%@] on_connect rc = %d", client.clientID, rc);
   client.connected = (rc == ConnectionAccepted);
   if (client.connectionCompletionHandler) {
     client.connectionCompletionHandler(rc);
@@ -90,7 +80,7 @@ static void on_connect(struct mosquitto *mosq, void *obj, int rc) {
 
 static void on_disconnect(struct mosquitto *mosq, void *obj, int rc) {
   MQTTClient *client = (__bridge MQTTClient *)obj;
-  LogDebug(@"[%@] on_disconnect rc = %d", client.clientID, rc);
+  MQTTLog(@"[%@] on_disconnect rc = %d", client.clientID, rc);
   [client.publishHandlers removeAllObjects];
   [client.subscriptionHandlers removeAllObjects];
   [client.unsubscriptionHandlers removeAllObjects];
@@ -130,7 +120,7 @@ static void on_message(struct mosquitto *mosq, void *obj,
                                                        retain:mosq_msg->retain
                                                           mid:mosq_msg->mid];
     MQTTClient *client = (__bridge MQTTClient *)obj;
-    LogDebug(@"[%@] on message %@", client.clientID, message);
+    MQTTLog(@"[%@] on message %@", client.clientID, message);
     if (client.messageHandler) {
       client.messageHandler(message);
     }
@@ -193,6 +183,8 @@ static void on_unsubscribe(struct mosquitto *mosq, void *obj, int message_id) {
     self.unsubscriptionHandlers = [[NSMutableDictionary alloc] init];
     self.publishHandlers = [[NSMutableDictionary alloc] init];
     self.cleanSession = cleanSession;
+    
+    self.isDebugMode = NO;
 
     const char *cstrClientId =
         [self.clientID cStringUsingEncoding:NSUTF8StringEncoding];
@@ -217,6 +209,11 @@ static void on_unsubscribe(struct mosquitto *mosq, void *obj, int message_id) {
 
 - (void)setMessageRetry:(NSUInteger)seconds {
   mosquitto_message_retry_set(mosq, (unsigned int)seconds);
+}
+
+- (void)setIsDebugMode:(BOOL)isDebugMode {
+  _isDebugMode = isDebugMode;
+  isDebugMode ? setMQTTLogSwitch(1) : setMQTTLogSwitch(0);
 }
 
 - (void)dealloc {
@@ -250,9 +247,9 @@ static void on_unsubscribe(struct mosquitto *mosq, void *obj, int message_id) {
   mosquitto_connect(mosq, cstrHost, self.port, self.keepAlive);
 
   dispatch_async(self.queue, ^{
-    LogDebug(@"start mosquitto loop on %@", self.queue);
+    MQTTLog(@"start mosquitto loop on %@", self.queue);
     mosquitto_loop_forever(mosq, -1, 1);
-    LogDebug(@"end mosquitto loop on %@", self.queue);
+    MQTTLog(@"end mosquitto loop on %@", self.queue);
   });
 }
 

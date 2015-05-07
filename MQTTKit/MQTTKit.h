@@ -65,6 +65,8 @@ typedef void (^MQTTDisconnectionHandler)(NSUInteger code);
 @property(nonatomic, copy) MQTTMessageHandler messageHandler;
 @property(nonatomic, copy) MQTTDisconnectionHandler disconnectionHandler;
 
+@property(nonatomic, assign) BOOL isDebugMode;  // If debug mode on, the instance will send log to console (default is NO)
+
 + (void)initialize;
 + (NSString *)version;
 

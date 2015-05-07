@@ -31,6 +31,7 @@
 		93F20A95181A68AB00C34747 /* tls_mosq.c in Sources */ = {isa = PBXBuildFile; fileRef = 93F20A6F181A68AB00C34747 /* tls_mosq.c */; };
 		93F20A97181A68AB00C34747 /* util_mosq.c in Sources */ = {isa = PBXBuildFile; fileRef = 93F20A72181A68AB00C34747 /* util_mosq.c */; };
 		93F20A99181A68AB00C34747 /* will_mosq.c in Sources */ = {isa = PBXBuildFile; fileRef = 93F20A75181A68AB00C34747 /* will_mosq.c */; };
+		A38807F51AFBB4E8005837E3 /* MQTTLog.m in Sources */ = {isa = PBXBuildFile; fileRef = A38807F41AFBB4E8005837E3 /* MQTTLog.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -99,6 +100,8 @@
 		93F20A76181A68AB00C34747 /* will_mosq.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = will_mosq.h; sourceTree = "<group>"; };
 		93F20A9B181A692F00C34747 /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
 		93F20A9C181A76AF00C34747 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
+		A38807F31AFBB4E8005837E3 /* MQTTLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MQTTLog.h; sourceTree = "<group>"; };
+		A38807F41AFBB4E8005837E3 /* MQTTLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MQTTLog.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -160,6 +163,8 @@
 			children = (
 				93EEBCA01816CAB00055100D /* MQTTKit.h */,
 				93EEBCA21816CAB00055100D /* MQTTKit.m */,
+				A38807F31AFBB4E8005837E3 /* MQTTLog.h */,
+				A38807F41AFBB4E8005837E3 /* MQTTLog.m */,
 				93EEBC9E1816CAB00055100D /* Supporting Files */,
 			);
 			path = MQTTKit;
@@ -314,6 +319,7 @@
 				93F20A7B181A68AB00C34747 /* logging_mosq.c in Sources */,
 				93F20A84181A68AB00C34747 /* net_mosq.c in Sources */,
 				93F20A7E181A68AB00C34747 /* memory_mosq.c in Sources */,
+				A38807F51AFBB4E8005837E3 /* MQTTLog.m in Sources */,
 				93F20A95181A68AB00C34747 /* tls_mosq.c in Sources */,
 				93F20A99181A68AB00C34747 /* will_mosq.c in Sources */,
 				93F20A89181A68AB00C34747 /* read_handle_shared.c in Sources */,
