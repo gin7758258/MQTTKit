@@ -8,28 +8,28 @@
 //
 
 typedef NS_ENUM(NSUInteger, MQTTConnectionReturnCode) {
-    ConnectionAccepted,
-    ConnectionRefusedUnacceptableProtocolVersion,
-    ConnectionRefusedIdentiferRejected,
-    ConnectionRefusedServerUnavailable,
-    ConnectionRefusedBadUserNameOrPassword,
-    ConnectionRefusedNotAuthorized
+  ConnectionAccepted,
+  ConnectionRefusedUnacceptableProtocolVersion,
+  ConnectionRefusedIdentiferRejected,
+  ConnectionRefusedServerUnavailable,
+  ConnectionRefusedBadUserNameOrPassword,
+  ConnectionRefusedNotAuthorized
 };
 
 typedef NS_ENUM(NSUInteger, MQTTQualityOfService) {
-    AtMostOnce,
-    AtLeastOnce,
-    ExactlyOnce
+  AtMostOnce,
+  AtLeastOnce,
+  ExactlyOnce
 };
 
 #pragma mark - MQTT Message
 
 @interface MQTTMessage : NSObject
 
-@property (readonly, assign) unsigned short mid;
-@property (readonly, copy) NSString *topic;
-@property (readonly, copy) NSData *payload;
-@property (readonly, assign) BOOL retained;
+@property(readonly, assign) unsigned short mid;
+@property(readonly, copy) NSString *topic;
+@property(readonly, copy) NSData *payload;
+@property(readonly, assign) BOOL retained;
 
 - (NSString *)payloadString;
 
@@ -44,40 +44,47 @@ typedef void (^MQTTDisconnectionHandler)(NSUInteger code);
 @class MQTTClient;
 
 @interface MQTTClient : NSObject {
-    struct mosquitto *mosq;
+  struct mosquitto *mosq;
 }
 
-@property (readwrite, copy) NSString *clientID;
-@property (readwrite, copy) NSString *host;
-@property (readwrite, assign) unsigned short port;
-@property (readwrite, copy) NSString *username;
-@property (readwrite, copy) NSString *password;
-@property (readwrite, assign) unsigned short keepAlive;
-@property (readwrite, assign) unsigned int reconnectDelay; // in seconds (default is 1)
-@property (readwrite, assign) unsigned int reconnectDelayMax; // in seconds (default is 1)
-@property (readwrite, assign) BOOL reconnectExponentialBackoff; // wheter to backoff exponentially the reconnect attempts (default is NO)
-@property (readwrite, assign) BOOL cleanSession;
-@property (readonly, assign) BOOL connected;
-@property (nonatomic, copy) MQTTMessageHandler messageHandler;
-@property (nonatomic, copy) MQTTDisconnectionHandler disconnectionHandler;
+@property(readwrite, copy) NSString *clientID;
+@property(readwrite, copy) NSString *host;
+@property(readwrite, assign) unsigned short port;
+@property(readwrite, copy) NSString *username;
+@property(readwrite, copy) NSString *password;
+@property(readwrite, assign) unsigned short keepAlive;
+@property(readwrite, assign)
+    unsigned int reconnectDelay; // in seconds (default is 1)
+@property(readwrite, assign)
+    unsigned int reconnectDelayMax; // in seconds (default is 1)
+@property(readwrite, assign)
+    BOOL reconnectExponentialBackoff; // wheter to backoff exponentially the
+                                      // reconnect attempts (default is NO)
+@property(readwrite, assign) BOOL cleanSession;
+@property(readonly, assign) BOOL connected;
+@property(nonatomic, copy) MQTTMessageHandler messageHandler;
+@property(nonatomic, copy) MQTTDisconnectionHandler disconnectionHandler;
 
-+ (void) initialize;
-+ (NSString*) version;
++ (void)initialize;
++ (NSString *)version;
 
-- (MQTTClient*) initWithClientId: (NSString *)clientId;
-- (MQTTClient*) initWithClientId: (NSString *)clientId
-                    cleanSession: (BOOL )cleanSession;
+- (instancetype)initWithClientId:(NSString *)clientId;
+- (instancetype)initWithClientId:(NSString *)clientId
+                    cleanSession:(BOOL)cleanSession;
 
-- (void) setMaxInflightMessages:(NSUInteger)maxInflightMessages;
-- (void) setMessageRetry: (NSUInteger)seconds;
+- (void)setMaxInflightMessages:(NSUInteger)maxInflightMessages;
+- (void)setMessageRetry:(NSUInteger)seconds;
 
 #pragma mark - Connection
 
-- (void) connectWithCompletionHandler:(void (^)(MQTTConnectionReturnCode code))completionHandler;
-- (void) connectToHost: (NSString*)host
-     completionHandler:(void (^)(MQTTConnectionReturnCode code))completionHandler;
-- (void) disconnectWithCompletionHandler:(MQTTDisconnectionHandler)completionHandler;
-- (void) reconnect;
+- (void)connectWithCompletionHandler:
+    (void (^)(MQTTConnectionReturnCode code))completionHandler;
+- (void)connectToHost:(NSString *)host
+    completionHandler:
+        (void (^)(MQTTConnectionReturnCode code))completionHandler;
+- (void)disconnectWithCompletionHandler:
+    (MQTTDisconnectionHandler)completionHandler;
+- (void)reconnect;
 - (void)setWillData:(NSData *)payload
             toTopic:(NSString *)willTopic
             withQos:(MQTTQualityOfService)willQos
@@ -104,11 +111,11 @@ typedef void (^MQTTDisconnectionHandler)(NSUInteger code);
 #pragma mark - Subscribe
 
 - (void)subscribe:(NSString *)topic
-withCompletionHandler:(MQTTSubscriptionCompletionHandler)completionHandler;
+    withCompletionHandler:(MQTTSubscriptionCompletionHandler)completionHandler;
 - (void)subscribe:(NSString *)topic
           withQos:(MQTTQualityOfService)qos
 completionHandler:(MQTTSubscriptionCompletionHandler)completionHandler;
-- (void)unsubscribe: (NSString *)topic
-withCompletionHandler:(void (^)(void))completionHandler;
+- (void)unsubscribe:(NSString *)topic
+    withCompletionHandler:(void (^)(void))completionHandler;
 
 @end
